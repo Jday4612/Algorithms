@@ -1,48 +1,41 @@
 #define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 
-int cnt = 0;
-int s[10] = {0, };
-void hanoi(int n, int a, int b, int c);
+void hanoi_tower(int n, unsigned long long int k, int a, int b, int c);
 
-int main() {
+int main()
+{
 	int numTestCases;
-
 	scanf("%d", &numTestCases);
-	for (int i = 0; i < numTestCases; ++i) {
+
+	for (int i = 0; i < numTestCases; ++i)
+	{
 		int n;
+		unsigned long long int k;
 
-		scanf("%d", &n);
-		cnt = 0;
-		for (int j = 0; j < 10; j++)
-			s[j] = 0;
-
-		hanoi(n, 1, 2, 3);
-		printf("\n");
+		scanf("%d %llu", &n, &k);
+		hanoi_tower(n, k, 1, 2, 3);
 	}
 
 	return 0;
 }
 
-/* hanoi ÇÔ¼ö */
-void hanoi(int n, int a, int b, int c) {
-	if (n > 0)
-	{
-		hanoi(n - 1, a, c, b);
+void hanoi_tower(int n, unsigned long long int k, int a, int b, int c) {
+	if (n == 1) {
+		printf("%d %d\n", a, c);
+		return;
+	}
+	else {
+		unsigned long long int t = (unsigned long long int)1 << (n - 1);
 
-		if (a == 3) {
-			s[cnt] = 0;
-			cnt--;
-			printf("%d ", s[cnt]);
+		if (k < t) {
+			hanoi_tower(n - 1, k, a, c, b);
 		}
-		
-		if (c == 3) {
-			cnt++;
-			s[cnt] = n;
-			printf("%d ", s[cnt]);
+		else if (k == t) {
+			printf("%d %d\n", a, c);
 		}
-
-		hanoi(n - 1, b, a, c);
+		else {
+			hanoi_tower(n - 1, k - t, b, a, c);
+		}
 	}
 }
