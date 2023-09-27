@@ -1,10 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node
-{
+struct node {
 	int data;
 	struct node* left;
 	struct node* right;
@@ -21,18 +19,19 @@ int maxPathWeight(struct node* root);
 void mirror(struct node** root);
 void destruct(struct node** root);
 
-int main() {
+int main()
+{
 	int numTestCases;
-
 	scanf("%d", &numTestCases);
+
 	while (numTestCases--) {
 		int num, i;
 		struct node* root = NULL;
-
+		
 		scanf("%d", &num);
+		
 		for (i = 0; i < num; i++) {
 			int data;
-
 			scanf("%d", &data);
 			insert(&root, data);
 		}
@@ -45,7 +44,8 @@ int main() {
 		preOrder(root); printf("\n");
 		inOrder(root); printf("\n");
 		postOrder(root); printf("\n");
-		destruct(&root); // BSTÀÇ ¸ðµç ³ëµåÀÇ µ¿Àû ¸Þ¸ð¸® ÇØÁ¦
+		destruct(&root); // BSTì˜ ëª¨ë“  ë…¸ë“œì˜ ë™ì  ë©”ëª¨ë¦¬ í•´ì œ
+
 		if (root == NULL)
 			printf("0\n");
 		else
@@ -55,9 +55,7 @@ int main() {
 	return 0;
 }
 
-// µ¥ÀÌÅÍ »ðÀÔ(recursion)
-void insert(struct node** root, int data)
-{
+void insert(struct node** root, int data) {
 	if (*root == NULL) {
 		*root = (struct node*)malloc(sizeof(struct node));
 		(*root)->data = data;
@@ -72,9 +70,7 @@ void insert(struct node** root, int data)
 	}
 }
 
-// ÀüÀ§(preorder)Å½»ö(recursion)
-void preOrder(struct node* root)
-{
+void preOrder(struct node* root) {
 	if (root == NULL)
 		return;
 	else {
@@ -84,9 +80,7 @@ void preOrder(struct node* root)
 	}
 }
 
-// ÁßÀ§(inorder)Å½»ö(recursion)
-void inOrder(struct node* root)
-{
+void inOrder(struct node* root) {
 	if (root == NULL)
 		return;
 	else {
@@ -96,9 +90,7 @@ void inOrder(struct node* root)
 	}
 }
 
-// ÈÄÀ§(postorder)Å½»ö(recursion)
-void postOrder(struct node* root)
-{
+void postOrder(struct node* root) {
 	if (root == NULL)
 		return;
 	else {
@@ -108,76 +100,60 @@ void postOrder(struct node* root)
 	}
 }
 
-// ³ëµåÀÇ °³¼ö(recursion)
-int size(struct node* root)
-{
+int size(struct node* root) {
 	if (root == NULL)
 		return 0;
 	else
 		return 1 + size(root->left) + size(root->right);
 }
 
-// ³ôÀÌ(recursion)
-int height(struct node* root)
-{
+int height(struct node* root) {
 	if (root == NULL)
 		return -1;
 	else {
 		int leftHeight = height(root->left);
 		int rightHeight = height(root->right);
 
-		if (leftHeight >= rightHeight)
-			return 1 + leftHeight;
-		else
+		if (leftHeight < rightHeight)
 			return 1 + rightHeight;
+		else
+			return 1 + leftHeight;
 	}
 }
 
-// ¹Ì·¯ ÀÌ¹ÌÁö·Î º¯È¯ÇÏ±â(recursion)
-void mirror(struct node** root)
-{
-	if (*root == NULL)
-		return;
-	else {
-		struct node* tmp = (struct node*)malloc(sizeof(struct node));
-
-		tmp = (*root)->left;
-		(*root)->left = (*root)->right;
-		(*root)->right = tmp;
-
-		mirror(&(*root)->left);
-		mirror(&(*root)->right);
-	}
-}
-
-// ³ëµå¿¡ ÀúÀåµÈ µ¥ÀÌÅÍÀÇ °ªÀÇ ÇÕ ±¸ÇÏ±â(recursion)
-int sumOfWeight(struct node* root)
-{
+int sumOfWeight(struct node* root) {
 	if (root == NULL)
 		return 0;
 	else
 		return root->data + sumOfWeight(root->left) + sumOfWeight(root->right);
 }
 
-// ·çÆ®³ëµåºÎÅÍ ´Ü¸»³ëµå±îÁöÀÇ °æ·Î »óÀÇ µ¥ÀÌÅÍÀÇ ÃÖ´ëÇÕ(recusrion)
-int maxPathWeight(struct node* root)
-{
+int maxPathWeight(struct node* root) {
 	if (root == NULL)
 		return 0;
 	else {
-		int leftHeight = maxPathWeight(root->left);
-		int rightHeight = maxPathWeight(root->right);
-
-		if (leftHeight >= rightHeight)
-			return root->data + leftHeight;
-		else
-			return root->data + rightHeight;
+		int leftWeight = maxPathWeight(root->left);
+		int rightWeight = maxPathWeight(root->right);
+		return root->data + (leftWeight >= rightWeight ? leftWeight : rightWeight);
 	}
 }
 
-// Æ®¸®³ëµåÀÇ µ¿Àû ¸Þ¸ð¸® ÇØÁ¦ÇÏ±â(recursion)
-void destruct(struct node** root)
-{
+void mirror(struct node** root) {
+	if (*root == NULL)
+		return;
+	else {
+		struct node* m = (struct node*)malloc(sizeof(struct node));
+
+		m = (*root)->left;
+		(*root)->left = (*root)->right;
+		(*root)->right = m;
+
+		mirror(&(*root)->left);
+		mirror(&(*root)->right);
+	}
+}
+
+void destruct(struct node** root) {
 	if (*root == NULL)
 		return;
 	else {
