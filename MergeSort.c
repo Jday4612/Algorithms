@@ -1,70 +1,65 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-#define MAX_SIZE 100
-
-int check;
 void merge(int a[], int low, int mid, int high);
 void mergeSort(int v[], int low, int high);
+int cnt = 0;
 
-int main() {
-    int numTestCases;
+int main()
+{
+	int numTestCases;
+	scanf("%d", &numTestCases);
 
-    scanf("%d", &numTestCases);
-    for (int i = 0; i < numTestCases; ++i) {
-        int n;
-        int a[MAX_SIZE];
-        check = 0;
+	while (numTestCases--) {
+		int n, a[100];
 
-        scanf("%d", &n);
+		scanf("%d", &n);
 
-        for (int j = 0; j < n; j++)
-            scanf("%d", &a[j]);
+		for (int i = 0; i < n; i++)
+			scanf("%d", &a[i]);
 
-        mergeSort(a, 0, n - 1);
-        printf("%d\n", check);
-    }
-    return 0;
+		cnt = 0;
+		mergeSort(a, 0, n - 1);
+		printf("%d\n", cnt);
+	}
+
+	return 0;
 }
 
-/* merge ÇÔ¼ö */
 void merge(int a[], int low, int mid, int high) {
-    int i, j, k;
-    int tmp[MAX_SIZE];
+	int i, j, k;
+	int tmp[100];
 
-    for (i = low; i <= high; i++)
-        tmp[i] = a[i];
+	for (i = low; i <= high; i++)
+		tmp[i] = a[i];
 
-    i = k = low;
-    j = mid + 1;
+	i = k = low;
+	j = mid + 1;
 
-    while (i <= mid && j <= high) {
-        check++;
+	while (i <= mid && j <= high) {
+		cnt++;
 
-        if (tmp[i] <= tmp[j])  // <---- ÇÙ½É¿¬»êÀÚ(ºñ±³¿¬»êÀÚ)
-            a[k++] = tmp[i++];
-        else
-            a[k++] = tmp[j++];
-    }
+		if (tmp[i] <= tmp[j]) // <---- í•µì‹¬ì—°ì‚°ìž(ë¹„êµì—°ì‚°ìž)
+			a[k++] = tmp[i++];
+		else
+			a[k++] = tmp[j++];
+	}
 
-    while (i <= mid)
-        a[k++] = tmp[i++];
-    while (j <= high)
-        a[k++] = tmp[j++];
+	while (i <= mid)
+		a[k++] = tmp[i++];
+	while (j <= high)
+		a[k++] = tmp[j++];
 }
 
-/* merge sort ÇÔ¼ö */
 void mergeSort(int v[], int low, int high) {
-    int mid;
+	int mid;
 
-    if (low == high)
-        return; /* base case */
+	if (low == high)
+		return; /* base case */
 
-    //Divide
-    mid = (low + high) / 2;
-
-    //Conquer
-    mergeSort(v, low, mid);
-    mergeSort(v, mid + 1, high);
-    merge(v, low, mid, high);
+	mid = (low + high) / 2;
+	
+	mergeSort(v, low, mid);
+	mergeSort(v, mid + 1, high);
+	merge(v, low, mid, high);
 }
